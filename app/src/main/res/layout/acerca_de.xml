@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/colorPrimary">
-
 <TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/TextView01"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_centerInParent="false"
-    android:layout_margin="30dp"
-    android:textSize="15sp"
-    android:textColor="@android:color/white"
-    android:text="@string/mensaje_acerca_de"/>
-
-</RelativeLayout>
+    android:padding="@dimen/text_margin"
+    android:text="@string/mensaje_acerca_de">
+</TextView>
