@@ -5,13 +5,14 @@
     <string name="action_acerca_de">Acerca de</string>
     <string name="dias">días</string>
     <string name="mensaje_acerca_de">
-        "App v0.1beta
+        "App v0.1beta\n"
         "desarrollada por Oscar Megía López\n"
         "bajo la licencia GPLv3\n"
         "https://www.gnu.org/licenses/gpl-3.0.html\n"
-        "Si quieres hacer una donación,\n"
-        "esta es mi cuenta de ING (España)\n"
-        "Código IBAN: ES17 1465 0100 95 1709864215"
+        "https://gitlab.com/Oscar65/RecordTimeDroid\n"
+        "Si quieres hacer una donación\n"
+        "este es mi código IBAN:\n"
+        "ES17 1465 0100 95 1709864215\n"
         "También puedes donar bitcoins\n"
         "bc1qrldk9a9w8evj7p96aekefng36j6g9hv4xnsn3t"
     </string>
