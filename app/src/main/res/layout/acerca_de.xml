@@ -5,5 +5,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="@dimen/text_margin"
-    android:text="@string/mensaje_acerca_de">
+    android:text="@string/mensaje_acerca_de"
+    android:textIsSelectable="true" >
 </TextView>
