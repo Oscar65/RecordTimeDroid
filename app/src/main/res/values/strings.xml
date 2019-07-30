@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Record Time Droid</string>
+    <string name="notificacion">Recorded line</string>
+    <string name="action_acerca_de">About</string>
+    <string name="dias">days</string>
+    <string name="mensaje_acerca_de">
+        "App v0.1beta "
+        "developed by Oscar Megía López\n"
+        "under license GPLv3\n"
+        "https://www.gnu.org/licenses/gpl-3.0.html\n"
+        "If you want to make a donation,\n"
+        "This is my ING bank account (Spain)\n"
+        "IBAN code: ES17 1465 0100 95 1709864215\n"
+        "Also you can donate bitcoins\n"
+        "bc1qrldk9a9w8evj7p96aekefng36j6g9hv4xnsn3t"
+    </string>
+</resources>
