@@ -13,14 +13,22 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
 public class ScrollingActivity extends AppCompatActivity {
     private TextView tView;
-    private static int linea = 1;
-    private static String text = "";
-    private static Date dFechaAnterior;
+    private int linea = 1;
+    private StringBuffer text;
+    private Date dFechaAnterior;
+    private String data;
+    private String fileName = "lines";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +37,44 @@ public class ScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         tView = (TextView) findViewById(R.id.textView1);
+        text = new StringBuffer();
+
+        try {
+            String[] sFileList = this.fileList();
+            if (Arrays.asList(sFileList).contains(fileName)) {
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS", Locale.ROOT);
+                DiasHorasMinutosSegundosMilisegundos dhmsmTempo = new DiasHorasMinutosSegundosMilisegundos();
+
+                FileInputStream fin = openFileInput(fileName);
+                int c;
+                String sFecha = "";
+
+                while ((c = fin.read()) != -1) {
+                    if (c == '\n') {
+                        Date d = format.parse(sFecha);
+                        text.append(String.format(Locale.ROOT, "%03d %s ", linea++, sFecha));
+                        if (dFechaAnterior != null) {
+                            calculaDiasHorasMinutosSegundos(dFechaAnterior, d, dhmsmTempo);
+                            text.append(String.format(Locale.ROOT, " %03d %s %02d:%02d:%02d.%03d",
+                                    (int) dhmsmTempo.getDias(), getResources().getString(R.string.dias),
+                                    (int) dhmsmTempo.getHoras(),
+                                    (int) dhmsmTempo.getMinutos(), (int) dhmsmTempo.getSegundos(),
+                                    (int) dhmsmTempo.getMilisegundos()));
+                        }
+                        text.append("\n");
+                        dFechaAnterior = format.parse(sFecha);
+                        sFecha = "";
+                    } else {
+                        sFecha += Character.toString((char) c);
+                    }
+                }
+                fin.close();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getBaseContext(),"ERROR " + e.getMessage() +
+                    " reading file",Toast.LENGTH_LONG).show();
+        }
         tView.setText(text);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -37,41 +83,69 @@ public class ScrollingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String notification = getResources().getString(R.string.notificacion) + " " + linea;
                 Snackbar.make(view, notification, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-                text += String.format(Locale.ROOT,"%03d - ", linea++) +
-                        android.text.format.DateFormat.format("dd-MM-yyyy HH:mm:ss",
-                                new java.util.Date()) + " ";
-                if (dFechaAnterior != null) {
-                    Date dAhora = new Date();
-                    long different = dAhora.getTime() - dFechaAnterior.getTime();
-                    long secondsInMilli = 1000;
-                    long minutesInMilli = secondsInMilli * 60;
-                    long hoursInMilli = minutesInMilli * 60;
-                    long daysInMilli = hoursInMilli * 24;
-
-                    long elapsedDays = different / daysInMilli;
-                    different = different % daysInMilli;
-
-                    long elapsedHours = different / hoursInMilli;
-                    different = different % hoursInMilli;
-
-                    long elapsedMinutes = different / minutesInMilli;
-                    different = different % minutesInMilli;
-
-                    long elapsedSeconds = different / secondsInMilli;
-                    different = different % secondsInMilli;
-
-                    long elapsedMiliseconds = different;
-
-                    text += String.format(Locale.ROOT, " - %03d %s %02d:%02d:%02d.%03d ", (int)elapsedDays,
-                            getResources().getString(R.string.dias), (int)elapsedHours,
-                            (int)elapsedMinutes, (int)elapsedSeconds, (int)elapsedMiliseconds);
+                        .setAction("Action", null).show();
+                Date dFechaHora = new Date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS", Locale.ROOT);
+                CharSequence csFechaHora = dateFormat.format(dFechaHora);
+                Date dAhora = new Date();
+                text.append(String.format(Locale.ROOT, "%03d ", linea));
+                text.append(csFechaHora);
+                text.append(" ");
+                if (linea > 1) {
+                    DiasHorasMinutosSegundosMilisegundos dhmsmTempo =
+                            new DiasHorasMinutosSegundosMilisegundos();
+                    calculaDiasHorasMinutosSegundos(dFechaAnterior, dAhora, dhmsmTempo);
+                    text.append(String.format(Locale.ROOT, " %03d %s %02d:%02d:%02d.%03d",
+                            (int) dhmsmTempo.getDias(), getResources().getString(R.string.dias), (int) dhmsmTempo.getHoras(),
+                            (int) dhmsmTempo.getMinutos(), (int) dhmsmTempo.getSegundos(),
+                            (int) dhmsmTempo.getMilisegundos()));
                 }
-                text += "\n";
+                linea++;
+                text.append("\n");
                 tView.setText(text);
                 dFechaAnterior = new Date();
+                data = dateFormat.format(dFechaHora) + "\n";
+
+                // Save line in file
+                try {
+                    FileOutputStream fOut = openFileOutput(fileName, MODE_APPEND);
+                    fOut.write(data.getBytes());
+                    fOut.close();
+                    //Toast.makeText(getBaseContext(),"file saved",Toast.LENGTH_SHORT).show();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getBaseContext(),"ERROR " + e.getMessage() +
+                            " saving file",Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    private void calculaDiasHorasMinutosSegundos(Date dIni, Date dFin,
+                                                 DiasHorasMinutosSegundosMilisegundos dhmsm) {
+        long different = dFin.getTime() - dIni.getTime();
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+        different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+        different = different % secondsInMilli;
+
+        dhmsm.setDias(elapsedDays);
+        dhmsm.setHoras(elapsedHours);
+        dhmsm.setMinutos(elapsedMinutes);
+        dhmsm.setSegundos(elapsedSeconds);
+        dhmsm.setMilisegundos(different);
     }
 
     @Override
@@ -95,6 +169,33 @@ public class ScrollingActivity extends AppCompatActivity {
 
             return true;
         }
+
+        if (id == R.id.reset) {
+            try {
+                String[] sFileList = this.fileList();
+                if (Arrays.asList(sFileList).contains(fileName)) {
+                    boolean ret = this.deleteFile(fileName);
+                    if (ret) {
+                        Toast.makeText(getBaseContext(), "file " + fileName + " deleted", Toast.LENGTH_LONG).show();
+                        text.delete(0,text.length());
+                        linea = 1;
+                        tView.setText(text);
+                    } else {
+                        Toast.makeText(getBaseContext(), "file " + fileName + " NOT deleted", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), "file " + fileName + " NOT exists", Toast.LENGTH_LONG).show();
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getBaseContext(),"ERROR " + e.getMessage() +
+                        " deleting file",Toast.LENGTH_LONG).show();
+            }
+
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
 }

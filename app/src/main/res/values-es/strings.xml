@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Record Time Droid</string>
     <string name="notificacion">Registrada linea</string>
-    <string name="action_acerca_de">Acerca de</string>
+    <string name="action_acerca_de">Acerca de ...</string>
     <string name="dias">días</string>
     <string name="mensaje_acerca_de">
         "Desarrollada por Oscar Megía López\n\n"
@@ -20,4 +20,5 @@
         "También puedes donar bitcoins en mi cartera:\n"
         "bc1qrldk9a9w8evj7p96aekefng36j6g9hv4xnsn3t"
     </string>
+    <string name="reset">Inicializar</string>
 </resources>
