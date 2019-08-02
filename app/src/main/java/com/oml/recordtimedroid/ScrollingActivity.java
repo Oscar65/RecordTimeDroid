@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,14 +88,13 @@ public class ScrollingActivity extends AppCompatActivity {
                 Date dFechaHora = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS", Locale.ROOT);
                 CharSequence csFechaHora = dateFormat.format(dFechaHora);
-                Date dAhora = new Date();
                 text.append(String.format(Locale.ROOT, "%03d ", linea));
                 text.append(csFechaHora);
                 text.append(" ");
                 if (linea > 1) {
                     DiasHorasMinutosSegundosMilisegundos dhmsmTempo =
                             new DiasHorasMinutosSegundosMilisegundos();
-                    calculaDiasHorasMinutosSegundos(dFechaAnterior, dAhora, dhmsmTempo);
+                    calculaDiasHorasMinutosSegundos(dFechaAnterior, dFechaHora, dhmsmTempo);
                     text.append(String.format(Locale.ROOT, " %03d %s %02d:%02d:%02d.%03d",
                             (int) dhmsmTempo.getDias(), getResources().getString(R.string.dias), (int) dhmsmTempo.getHoras(),
                             (int) dhmsmTempo.getMinutos(), (int) dhmsmTempo.getSegundos(),
@@ -103,7 +103,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 linea++;
                 text.append("\n");
                 tView.setText(text);
-                dFechaAnterior = new Date();
+                dFechaAnterior = new Date(dFechaHora.getTime());
                 data = dateFormat.format(dFechaHora) + "\n";
 
                 // Save line in file
