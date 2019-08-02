@@ -6,12 +6,15 @@
     <string name="mensaje_acerca_de">
         "Developed by Oscar Megía López\n\n"
 
-        "version " BuildConfig.VERSION_NAME "\n"
+        "version %1$s\n"
         "under license GPLv3\n"
         "https://www.gnu.org/licenses/gpl-3.0.html\n\n"
 
         "Source code:\n"
         "https://gitlab.com/Oscar65/RecordTimeDroid\n\n"
+
+        "Icon downloaded from:\n"
+        "https://icons8.com/icons/set/clock\n\n"
 
         "If you want to make a donation:\n"
         "ES17 1465 0100 95 1709864215\n\n"
