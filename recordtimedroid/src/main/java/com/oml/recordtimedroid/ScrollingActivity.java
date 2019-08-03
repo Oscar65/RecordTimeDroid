@@ -169,7 +169,7 @@ public class ScrollingActivity extends AppCompatActivity {
             return true;
         }
 
-        if (id == R.id.reset) {
+        if (id == R.id.action_reset) {
             try {
                 String[] sFileList = this.fileList();
                 if (Arrays.asList(sFileList).contains(fileName)) {

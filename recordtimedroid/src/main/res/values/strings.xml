@@ -6,7 +6,7 @@
     <string name="mensaje_acerca_de">
         "Developed by Oscar Megía López\n\n"
 
-        "version %1$s\n"
+        "version %1$s (%2$s)\n"
         "under license GPLv3\n"
         "https://www.gnu.org/licenses/gpl-3.0.html\n\n"
 
@@ -21,6 +21,19 @@
 
         "Also you can donate bitcoins in my wallet:\n"
         "bc1qrldk9a9w8evj7p96aekefng36j6g9hv4xnsn3t"
+    </string>
+    <string name="mensaje_acerca_de_google">
+        "Developed by Oscar Megía López\n\n"
+
+        "version %1$s (%2$s)\n"
+        "under license GPLv3\n"
+        "https://www.gnu.org/licenses/gpl-3.0.html\n\n"
+
+        "Source code:\n"
+        "https://gitlab.com/Oscar65/RecordTimeDroid\n\n"
+
+        "Icon downloaded from:\n"
+        "https://icons8.com/icons/set/clock"
     </string>
     <string name="reset">Reset</string>
 </resources>

@@ -1,14 +1,23 @@
 apply plugin: 'com.android.application'
 
+
 android {
+    // https://stackoverflow.com/questions/21405457/autoincrement-versioncode-with-gradle-extra-properties
+    /**
+     * Use the number of seconds/10 since Jan 1 2016 as the versionCode.
+     * This lets us upload a new build at most every 10 seconds for the
+     * next 680 years.
+     */
+    def vcode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
+
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
     defaultConfig {
         applicationId "com.oml.recordtimedroid"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 8
-        versionName "0.8beta"
+        versionCode vcode
+        versionName "0.9gbeta"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

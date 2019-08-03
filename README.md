@@ -2,7 +2,7 @@
 
 This is an Android app to record time and show elapsed time between previously recorded line.
 
-These are two app screenshots:
+These are app screenshots:
 
 Main screen:
 
@@ -11,3 +11,7 @@ Main screen:
 Menu:
 
 ![](Screenshot_2019-08-02-19-25-38.png)
+
+Screen about:
+
+![](Screenshot_2019-08-03-08-07-39.png)
