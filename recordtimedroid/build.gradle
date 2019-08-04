@@ -14,15 +14,13 @@ android {
     if (versionPropsFile.canRead()) {
         def Properties versionProps = new Properties()
         versionProps.load(new FileInputStream(versionPropsFile))
-        versionBuild = versionProps['VERSION_BUILD'].toInteger()
+        versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
     } else {
         throw new FileNotFoundException("Could not read version.properties!")
     }
 
-
     /*Wrapping inside a method avoids auto incrementing on every gradle task run. Now it runs only when we build apk*/
     ext.autoIncrementBuildNumber = {
-
         if (versionPropsFile.canRead()) {
             def Properties versionProps = new Properties()
             versionProps.load(new FileInputStream(versionPropsFile))
@@ -42,12 +40,14 @@ android {
         versionName "1.0." + versionBuild
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     // Hook to check if the release/debug task is among the tasks to be executed.
     //Let's make use of it
     gradle.taskGraph.whenReady {taskGraph ->
