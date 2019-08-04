@@ -7,10 +7,6 @@ android {
 
     // https://devdeeds.com/auto-increment-build-number-using-gradle-in-android/
     // Saves and autoincrement build number in version.properties file. Also saves build date.
-    // So, I can update manually versionCode.
-    // If you clone the repo and you have the App installed, you need to update version.properties
-    // file to a VERSION_BUILD mayor than your App installed (between parenthesis in About screen),
-    // If not, it will downgrade App.
     def versionPropsFile = file('version.properties')
     def versionBuild
 
@@ -42,8 +38,8 @@ android {
         applicationId "com.oml.recordtimedroid"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 19
-        versionName "0.10beta"
+        versionCode 12
+        versionName "0.12gbeta." + versionBuild
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
