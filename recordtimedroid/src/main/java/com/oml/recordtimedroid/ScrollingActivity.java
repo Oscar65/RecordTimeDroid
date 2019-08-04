@@ -36,7 +36,7 @@ public class ScrollingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        tView = (TextView) findViewById(R.id.textView1);
+        tView = (TextView) findViewById(R.id.tvLines);
         text = new StringBuffer();
 
         try {

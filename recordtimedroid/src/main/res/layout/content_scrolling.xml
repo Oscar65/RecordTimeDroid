@@ -10,10 +10,11 @@
     tools:showIn="@layout/activity_scrolling">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tvLines"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_margin="@dimen/text_margin"
+        android:textIsSelectable="true" />
 
 
 </androidx.core.widget.NestedScrollView>
