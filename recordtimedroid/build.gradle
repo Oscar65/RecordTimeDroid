@@ -39,7 +39,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 12
-        versionName "0.12gbeta." + versionBuild
+        versionName "0.12beta." + versionBuild
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
