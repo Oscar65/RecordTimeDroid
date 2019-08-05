@@ -36,8 +36,8 @@ android {
         applicationId "com.oml.recordtimedroid"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 20
-        versionName "1.0." + versionBuild
+        versionCode 21
+        versionName "1.1g"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -45,6 +45,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField ("int", "VERSION_BUILD", versionBuild.toString())
+        }
+        debug {
+            buildConfigField ("int", "VERSION_BUILD", versionBuild.toString())
         }
     }
 
