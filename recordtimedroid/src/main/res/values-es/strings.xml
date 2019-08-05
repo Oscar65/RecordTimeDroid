@@ -7,7 +7,7 @@
     <string name="mensaje_acerca_de">
         "Desarrollada por Oscar Megía López\n\n"
 
-        "versión %1$s (%2$s)\n"
+        "versión %1$s (build %2$s)\n"
         "bajo la licencia GPLv3\n"
         "https://www.gnu.org/licenses/gpl-3.0.html\n\n"
 
