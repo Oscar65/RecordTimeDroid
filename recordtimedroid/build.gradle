@@ -12,7 +12,7 @@ android {
 
     /*Setting default value for versionBuild which is the last incremented value stored in the file */
     if (versionPropsFile.canRead()) {
-        def Properties versionProps = new Properties()
+        Properties versionProps = new Properties()
         versionProps.load(new FileInputStream(versionPropsFile))
         versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
     } else {
@@ -22,7 +22,7 @@ android {
     /*Wrapping inside a method avoids auto incrementing on every gradle task run. Now it runs only when we build apk*/
     ext.autoIncrementBuildNumber = {
         if (versionPropsFile.canRead()) {
-            def Properties versionProps = new Properties()
+            Properties versionProps = new Properties()
             versionProps.load(new FileInputStream(versionPropsFile))
             versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
             versionProps['VERSION_BUILD'] = versionBuild.toString()
@@ -36,8 +36,8 @@ android {
         applicationId "com.oml.recordtimedroid"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 21
-        versionName "1.1"
+        versionCode 22
+        versionName "1.2gBeta"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -65,7 +65,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

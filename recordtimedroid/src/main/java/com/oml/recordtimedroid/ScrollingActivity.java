@@ -25,7 +25,7 @@ import java.util.Locale;
 public class ScrollingActivity extends AppCompatActivity {
     private TextView tView;
     private int linea = 1;
-    private StringBuffer text;
+    private StringBuffer sbText;
     private Date dFechaAnterior;
     private String data;
     private String fileName = "lines";
@@ -37,7 +37,7 @@ public class ScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         tView = (TextView) findViewById(R.id.tvLines);
-        text = new StringBuffer();
+        sbText = new StringBuffer();
 
         try {
             String[] sFileList = this.fileList();
@@ -52,16 +52,16 @@ public class ScrollingActivity extends AppCompatActivity {
                 while ((c = fin.read()) != -1) {
                     if (c == '\n') {
                         Date d = format.parse(sFecha);
-                        text.append(String.format(Locale.ROOT, "%03d %s ", linea++, sFecha));
-                        if (dFechaAnterior != null) {
+                        sbText.append(String.format(Locale.ROOT, "%03d | %s | ", linea++, sFecha));
+                        if (dFechaAnterior != null && d != null) {
                             calculaDiasHorasMinutosSegundos(dFechaAnterior, d, dhmsmTempo);
-                            text.append(String.format(Locale.ROOT, " %03d %s %02d:%02d:%02d.%03d",
+                            sbText.append(String.format(Locale.ROOT, "%03d %s %02d:%02d:%02d.%03d",
                                     (int) dhmsmTempo.getDias(), getResources().getString(R.string.dias),
                                     (int) dhmsmTempo.getHoras(),
                                     (int) dhmsmTempo.getMinutos(), (int) dhmsmTempo.getSegundos(),
                                     (int) dhmsmTempo.getMilisegundos()));
                         }
-                        text.append("\n");
+                        sbText.append("\n");
                         dFechaAnterior = format.parse(sFecha);
                         sFecha = "";
                     } else {
@@ -75,33 +75,36 @@ public class ScrollingActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(),"ERROR " + e.getMessage() +
                     " reading file",Toast.LENGTH_LONG).show();
         }
-        tView.setText(text);
+        tView.setText(sbText);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String notification = getResources().getString(R.string.notificacion) + " " + linea;
-                Snackbar.make(view, notification, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 Date dFechaHora = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS", Locale.ROOT);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
+                        Locale.ROOT);
                 CharSequence csFechaHora = dateFormat.format(dFechaHora);
-                text.append(String.format(Locale.ROOT, "%03d ", linea));
-                text.append(csFechaHora);
-                text.append(" ");
+                sbText.append(String.format(Locale.ROOT, "%03d | ", linea));
+                sbText.append(csFechaHora);
+                sbText.append(" | ");
                 if (linea > 1) {
                     DiasHorasMinutosSegundosMilisegundos dhmsmTempo =
                             new DiasHorasMinutosSegundosMilisegundos();
                     calculaDiasHorasMinutosSegundos(dFechaAnterior, dFechaHora, dhmsmTempo);
-                    text.append(String.format(Locale.ROOT, " %03d %s %02d:%02d:%02d.%03d",
-                            (int) dhmsmTempo.getDias(), getResources().getString(R.string.dias), (int) dhmsmTempo.getHoras(),
-                            (int) dhmsmTempo.getMinutos(), (int) dhmsmTempo.getSegundos(),
-                            (int) dhmsmTempo.getMilisegundos()));
+                    String sDiferencia = String.format(Locale.ROOT, "%03d %s %02d:%02d:%02d.%03d",
+                            (int) dhmsmTempo.getDias(), getResources().getString(R.string.dias),
+                            (int) dhmsmTempo.getHoras(), (int) dhmsmTempo.getMinutos(),
+                            (int) dhmsmTempo.getSegundos(), (int) dhmsmTempo.getMilisegundos());
+                    sbText.append(sDiferencia);
+                    String notification = getResources().getString(R.string.notificacion) + " " +
+                            linea + " +" + sDiferencia;
+                    Snackbar.make(view, notification, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
                 linea++;
-                text.append("\n");
-                tView.setText(text);
+                sbText.append("\n");
+                tView.setText(sbText);
                 dFechaAnterior = new Date(dFechaHora.getTime());
                 data = dateFormat.format(dFechaHora) + "\n";
 
@@ -176,9 +179,9 @@ public class ScrollingActivity extends AppCompatActivity {
                     boolean ret = this.deleteFile(fileName);
                     if (ret) {
                         Toast.makeText(getBaseContext(), "file " + fileName + " deleted", Toast.LENGTH_LONG).show();
-                        text.delete(0,text.length());
+                        sbText.delete(0, sbText.length());
                         linea = 1;
-                        tView.setText(text);
+                        tView.setText(sbText);
                     } else {
                         Toast.makeText(getBaseContext(), "file " + fileName + " NOT deleted", Toast.LENGTH_LONG).show();
                     }

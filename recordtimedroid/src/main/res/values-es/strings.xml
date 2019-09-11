@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Record Time Droid</string>
-    <string name="notificacion">Registrada linea</string>
+    <string name="notificacion">Registrada línea</string>
     <string name="action_acerca_de">Acerca de ...</string>
     <string name="dias">días</string>
     <string name="mensaje_acerca_de">
