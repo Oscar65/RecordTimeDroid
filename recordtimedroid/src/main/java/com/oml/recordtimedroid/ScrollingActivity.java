@@ -26,7 +26,7 @@ public class ScrollingActivity extends AppCompatActivity {
     private TextView tView;
     private int linea = 1;
     private StringBuffer sbText;
-    private Date dFechaAnterior;
+    private long lFechaAnterior;
     private String data;
     private String fileName = "lines";
 
@@ -42,19 +42,24 @@ public class ScrollingActivity extends AppCompatActivity {
         try {
             String[] sFileList = this.fileList();
             if (Arrays.asList(sFileList).contains(fileName)) {
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS", Locale.ROOT);
+                SimpleDateFormat sdfDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS", Locale.ROOT);
                 DiasHorasMinutosSegundosMilisegundos dhmsmTempo = new DiasHorasMinutosSegundosMilisegundos();
 
                 FileInputStream fin = openFileInput(fileName);
                 int c;
-                String sFecha = "";
+                String sFecha;
+                long lFecha;
+                lFechaAnterior = -1;
+                StringBuilder sbBuff = new StringBuilder();
 
                 while ((c = fin.read()) != -1) {
                     if (c == '\n') {
-                        Date d = format.parse(sFecha);
+                        lFecha = Long.parseLong(sbBuff.toString());
+                        Date d = new Date(lFecha);
+                        sFecha = sdfDateFormat.format(d);
                         sbText.append(String.format(Locale.ROOT, "%03d | %s | ", linea++, sFecha));
-                        if (dFechaAnterior != null && d != null) {
-                            calculaDiasHorasMinutosSegundos(dFechaAnterior, d, dhmsmTempo);
+                        if (lFechaAnterior != -1) {
+                            calculaDiasHorasMinutosSegundos(lFechaAnterior, lFecha, dhmsmTempo);
                             sbText.append(String.format(Locale.ROOT, "%03d %s %02d:%02d:%02d.%03d",
                                     (int) dhmsmTempo.getDias(), getResources().getString(R.string.dias),
                                     (int) dhmsmTempo.getHoras(),
@@ -62,10 +67,10 @@ public class ScrollingActivity extends AppCompatActivity {
                                     (int) dhmsmTempo.getMilisegundos()));
                         }
                         sbText.append("\n");
-                        dFechaAnterior = format.parse(sFecha);
-                        sFecha = "";
+                        lFechaAnterior = lFecha;
+                        sbBuff.setLength(0);
                     } else {
-                        sFecha += Character.toString((char) c);
+                        sbBuff.append( (char)c );
                     }
                 }
                 fin.close();
@@ -82,16 +87,18 @@ public class ScrollingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Date dFechaHora = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
+                long lActualFecha = dFechaHora.getTime();
+
+                SimpleDateFormat sdfDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
                         Locale.ROOT);
-                CharSequence csFechaHora = dateFormat.format(dFechaHora);
+                CharSequence csFechaHora = sdfDateFormat.format(dFechaHora);
                 sbText.append(String.format(Locale.ROOT, "%03d | ", linea));
                 sbText.append(csFechaHora);
                 sbText.append(" | ");
                 if (linea > 1) {
                     DiasHorasMinutosSegundosMilisegundos dhmsmTempo =
                             new DiasHorasMinutosSegundosMilisegundos();
-                    calculaDiasHorasMinutosSegundos(dFechaAnterior, dFechaHora, dhmsmTempo);
+                    calculaDiasHorasMinutosSegundos(lFechaAnterior, lActualFecha, dhmsmTempo);
                     String sDiferencia = String.format(Locale.ROOT, "%03d %s %02d:%02d:%02d.%03d",
                             (int) dhmsmTempo.getDias(), getResources().getString(R.string.dias),
                             (int) dhmsmTempo.getHoras(), (int) dhmsmTempo.getMinutos(),
@@ -105,10 +112,10 @@ public class ScrollingActivity extends AppCompatActivity {
                 linea++;
                 sbText.append("\n");
                 tView.setText(sbText);
-                dFechaAnterior = new Date(dFechaHora.getTime());
-                data = dateFormat.format(dFechaHora) + "\n";
+                lFechaAnterior = lActualFecha;
+                data = lActualFecha + "\n";
 
-                // Save line in file
+                // Save line in file with unix timestamp in milliseconds
                 try {
                     FileOutputStream fOut = openFileOutput(fileName, MODE_APPEND);
                     fOut.write(data.getBytes());
@@ -123,31 +130,31 @@ public class ScrollingActivity extends AppCompatActivity {
         });
     }
 
-    private void calculaDiasHorasMinutosSegundos(Date dIni, Date dFin,
+    private void calculaDiasHorasMinutosSegundos(long dIni, long dFin,
                                                  DiasHorasMinutosSegundosMilisegundos dhmsm) {
-        long different = dFin.getTime() - dIni.getTime();
+        long diff = dFin - dIni;
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
         long hoursInMilli = minutesInMilli * 60;
         long daysInMilli = hoursInMilli * 24;
 
-        long elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
+        long elapsedDays = diff / daysInMilli;
+        diff = diff % daysInMilli;
 
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
+        long elapsedHours = diff / hoursInMilli;
+        diff = diff % hoursInMilli;
 
-        long elapsedMinutes = different / minutesInMilli;
-        different = different % minutesInMilli;
+        long elapsedMinutes = diff / minutesInMilli;
+        diff = diff % minutesInMilli;
 
-        long elapsedSeconds = different / secondsInMilli;
-        different = different % secondsInMilli;
+        long elapsedSeconds = diff / secondsInMilli;
+        diff = diff % secondsInMilli;
 
         dhmsm.setDias(elapsedDays);
         dhmsm.setHoras(elapsedHours);
         dhmsm.setMinutos(elapsedMinutes);
         dhmsm.setSegundos(elapsedSeconds);
-        dhmsm.setMilisegundos(different);
+        dhmsm.setMilisegundos(diff);
     }
 
     @Override
