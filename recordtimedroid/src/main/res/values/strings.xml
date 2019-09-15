@@ -4,7 +4,7 @@
     <string name="action_acerca_de">About</string>
     <string name="dias">days</string>
     <string name="mensaje_acerca_de">
-        "Developed by Oscar Megía López\n\n"
+        "App developed by Oscar Megía López\n\n"
 
         "version %1$s (build %2$d)\n"
         "under license GPLv3\n"
@@ -23,7 +23,7 @@
         "bc1qrldk9a9w8evj7p96aekefng36j6g9hv4xnsn3t"
     </string>
     <string name="mensaje_acerca_de_google">
-        "Developed by Oscar Megía López\n\n"
+        "App developed by Oscar Megía López\n\n"
 
         "version %1$s (build %2$d)\n"
         "under license GPLv3\n"
@@ -36,4 +36,6 @@
         "https://icons8.com/icons/set/clock"
     </string>
     <string name="reset">Reset</string>
+    <string name="selected_lines">Selected</string>
+    <string name="total">Total</string>
 </resources>
